@@ -1,11 +1,11 @@
 # wrangler.toml
 name = "vulnlog"
-main = "src/worker.js"
+main = "cloudflare-worker/worker.js"
 compatibility_date = "2024-06-20"
 workers_dev = true
 
 [[kv_namespaces]]
-binding = "VULNSHOP_LOGS"
+binding = "HONEYPOT_KV"
 id = "e861ae97c7144fe7adcd277b98c47370"
 
 [[r2_buckets]]
@@ -25,4 +25,4 @@ ADMIN_PASS = "sudosu"
 ADMIN_IP_ALLOWLIST = "1.2.3.4,5.6.7.8"  # comma-separated; empty means allow all
 
 [observability]
-enabled = trues
+enabled = true
