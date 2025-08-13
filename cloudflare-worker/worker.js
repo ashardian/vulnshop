@@ -1,96 +1,131 @@
 export default {
   async fetch(request, env, ctx) {
-    try {
-      // Parse request data
-      const { method, url, headers } = request;
-      const cf = request.cf || {};
-      const ip = headers.get("CF-Connecting-IP") || "Unknown IP";
-      const ua = headers.get("User-Agent") || "Unknown UA";
-      const referer = headers.get("Referer") || "No referer";
-      const country = cf.country || "??";
-      const asn = cf.asn || "N/A";
-      const path = new URL(url).pathname;
-      const time = new Date().toISOString();
+    const url = new URL(request.url);
 
-      let payload = {};
-      if (method === "POST") {
-        try {
-          payload = await request.json();
-        } catch {
-          payload = { error: "Invalid JSON" };
-        }
-      } else {
-        payload = Object.fromEntries(new URL(url).searchParams);
-      }
+    // Parse origins from env
+    const allowedPublic = env.ALLOWED_ORIGIN_PUBLIC?.split(",") || [];
+    const allowedAdmin = env.ALLOWED_ORIGIN_ADMIN?.split(",") || [];
 
-      // Mask sensitive data
-      //const maskPII = (str) =>
-        //typeof str === "string"
-          //? str
-              //.replace(/\b[\w.%+-]+@[\w.-]+\.[A-Z]{2,}\b/gi, "[EMAIL]")
-              //.replace(/\b\d{13,16}\b/g, "[CREDIT_CARD]")
-              //.replace(/\b\d{10,12}\b/g, "[PHONE]")
-          //: str;
-      //payload = JSON.parse(JSON.stringify(payload), (_, v) => maskPII(v));
+    // Handle preflight CORS
+    if (request.method === "OPTIONS") {
+      return handleOptions(request, allowedPublic, allowedAdmin);
+    }
 
-      // Build log entry
-      const logEntry = {
-        time,
-        ip,
-        country,
-        asn,
-        ua,
-        referer,
-        path,
-        method,
-        payload,
-      };
+    // Routing
+    if (url.pathname === "/log" && request.method === "POST") {
+      return handleLog(request, env, allowedPublic);
+    }
 
-      // Store in KV (with 7-day TTL)
-      if (env.HONEYPOT_KV) {
-        await env.HONEYPOT_KV.put(
-          `log_${Date.now()}_${ip}`,
-          JSON.stringify(logEntry),
-          { expirationTtl: 60 * 60 * 24 * 7 }
-        );
-      }
+    if (url.pathname === "/upload" && request.method === "POST") {
+      return handleUpload(request, env, allowedPublic);
+    }
 
-      // Send Telegram alert
-      if (env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID) {
-        const alertMsg = `🚨 Honeypot Triggered 🚨
-🌐 IP: ${ip} (${country}, ASN ${asn})
-🕒 Time: ${time}
-📍 Path: ${path}
-📑 Data: ${JSON.stringify(payload)}`;
-        await sendTelegram(env, alertMsg);
-      }
-
-      return new Response(JSON.stringify({ status: "logged" }), {
-        headers: { "Content-Type": "application/json" },
-      });
-    } catch (err) {
-      return new Response(JSON.stringify({ error: err.message }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
+    if (url.pathname === "/events" && request.method === "GET") {
+      return requireAuth(request, env, async () => {
+        return handleEvents(env, allowedAdmin);
       });
     }
-  },
+
+    if (url.pathname === "/stats" && request.method === "GET") {
+      return requireAuth(request, env, async () => {
+        return handleStats(env, allowedAdmin);
+      });
+    }
+
+    return new Response("Not found", { status: 404 });
+  }
 };
 
-async function sendTelegram(env, text) {
-  const api = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`;
-  for (let i = 0; i < 3; i++) {
-    const res = await fetch(api, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: env.TELEGRAM_CHAT_ID,
-        text,
-        parse_mode: "Markdown",
-      }),
+// ===== Helper: CORS Preflight =====
+function handleOptions(request, allowedPublic, allowedAdmin) {
+  const origin = request.headers.get("Origin");
+  if (origin && (allowedPublic.includes(origin) || allowedAdmin.includes(origin))) {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "Access-Control-Allow-Origin": origin,
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      }
     });
-    if (res.ok) break;
-    await new Promise((r) => setTimeout(r, (i + 1) * 1000));
+  }
+  return new Response(null, { status: 204 });
+}
+
+// ===== Auth for Admin Endpoints =====
+function requireAuth(request, env, callback) {
+  const auth = request.headers.get("Authorization") || "";
+  const expected = "Basic " + btoa(`${env.ADMIN_USER}:${env.ADMIN_PASS}`);
+  if (auth === expected) {
+    return callback();
+  }
+  return new Response("Unauthorized", {
+    status: 401,
+    headers: { "WWW-Authenticate": 'Basic realm="Admin"' }
+  });
+}
+
+// ===== Handle /log =====
+async function handleLog(request, env, allowedPublic) {
+  const origin = request.headers.get("Origin");
+  if (!allowedPublic.includes(origin)) {
+    return new Response("Forbidden", { status: 403 });
+  }
+
+  try {
+    const data = await request.json();
+    const timestamp = new Date().toISOString();
+    const key = `log:${timestamp}:${crypto.randomUUID()}`;
+    await env.HONEYPOT_KV.put(key, JSON.stringify(data));
+    return new Response(JSON.stringify({ ok: true }), {
+      headers: { "Access-Control-Allow-Origin": origin, "Content-Type": "application/json" }
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ ok: false, error: err.message }), { status: 500 });
   }
 }
 
+// ===== Handle /upload =====
+async function handleUpload(request, env, allowedPublic) {
+  const origin = request.headers.get("Origin");
+  if (!allowedPublic.includes(origin)) {
+    return new Response("Forbidden", { status: 403 });
+  }
+
+  try {
+    const formData = await request.formData();
+    const file = formData.get("file");
+    if (!file) throw new Error("No file uploaded");
+
+    const key = `uploads/${Date.now()}-${file.name}`;
+    await env.BLOB_BUCKET.put(key, file.stream());
+
+    return new Response(JSON.stringify({ ok: true, key }), {
+      headers: { "Access-Control-Allow-Origin": origin, "Content-Type": "application/json" }
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ ok: false, error: err.message }), { status: 500 });
+  }
+}
+
+// ===== Handle /events =====
+async function handleEvents(env, allowedAdmin) {
+  const list = await env.HONEYPOT_KV.list({ prefix: "log:" });
+  const logs = [];
+  for (const key of list.keys) {
+    const value = await env.HONEYPOT_KV.get(key.name);
+    logs.push({ key: key.name, data: JSON.parse(value) });
+  }
+  return new Response(JSON.stringify(logs), {
+    headers: { "Access-Control-Allow-Origin": allowedAdmin[0] || "*", "Content-Type": "application/json" }
+  });
+}
+
+// ===== Handle /stats =====
+async function handleStats(env, allowedAdmin) {
+  const list = await env.HONEYPOT_KV.list({ prefix: "log:" });
+  const count = list.keys.length;
+  return new Response(JSON.stringify({ logCount: count }), {
+    headers: { "Access-Control-Allow-Origin": allowedAdmin[0] || "*", "Content-Type": "application/json" }
+  });
+}
