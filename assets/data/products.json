@@ -1,4 +1,4 @@
-// vulnshop/assets/data/products.json
+ vulnshop/assets/data/products.json
 [
   { "id": 42, "name": "Wireless Earbuds Pro", "price": 69.0, "img": "assets/img/prod1.jpg", "desc": "ANC, 24h battery." },
   { "id": 1337, "name": "Smart Home Hub", "price": 129.0, "img": "assets/img/prod2.jpg", "desc": "Connects all devices." },
