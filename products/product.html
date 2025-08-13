@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>VulnShop — Products</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- If style.css sits next to this file -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="cart.html">Cart</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Products</h1>
+    <p class="muted mb">Curated gadgets and accessories. New items weekly.</p>
+
+    <div class="grid mt" id="catalog">
+      <!-- Product 1 -->
+      <div class="card">
+        <img src="assets/img/prod1.jpg" alt="Wireless Earbuds Pro" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Wireless Earbuds Pro</div>
+          <div class="price">$69.00</div>
+          <div class="mt">
+            <a class="btn outline" href="product.html?id=42">View details</a>
+            <button class="btn btn-add" data-id="42" data-name="Wireless Earbuds Pro" data-price="69">Add to cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="card">
+        <img src="assets/img/prod2.jpg" alt="Smart Home Hub" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Smart Home Hub</div>
+          <div class="price">$129.00</div>
+          <div class="mt">
+            <a class="btn outline" href="product.html?id=1337">View details</a>
+            <button class="btn btn-add" data-id="1337" data-name="Smart Home Hub" data-price="129">Add to cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="card">
+        <img src="assets/img/prod3.jpg" alt="Mechanical Keyboard" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Mechanical Keyboard</div>
+          <div class="price">$89.00</div>
+          <div class="mt">
+            <a class="btn outline" href="product.html?id=7">View details</a>
+            <button class="btn btn-add" data-id="7" data-name="Mechanical Keyboard" data-price="89">Add to cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 4 -->
+      <div class="card">
+        <img src="assets/img/prod4.jpg" alt="Action Camera 4K" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Action Camera 4K</div>
+          <div class="price">$199.00</div>
+          <div class="mt">
+            <a class="btn outline" href="product.html?id=256">View details</a>
+            <button class="btn btn-add" data-id="256" data-name="Action Camera 4K" data-price="199">Add to cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 5 -->
+      <div class="card">
+        <img src="assets/img/prod5.jpg" alt="Portable SSD 1TB" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Portable SSD 1TB</div>
+          <div class="price">$79.00</div>
+          <div class="mt">
+            <a class="btn outline" href="product.html?id=21">View details</a>
+            <button class="btn btn-add" data-id="21" data-name="Portable SSD 1TB" data-price="79">Add to cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 6 -->
+      <div class="card">
+        <img src="assets/img/prod6.jpg" alt="Smart Bulb (4-pack)" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Smart Bulb (4‑pack)</div>
+          <div class="price">$39.00</div>
+          <div class="mt">
+            <a class="btn outline" href="product.html?id=84">View details</a>
+            <button class="btn btn-add" data-id="84" data-name="Smart Bulb (4-pack)" data-price="39">Add to cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 7 -->
+      <div class="card">
+        <img src="assets/img/prod7.jpg" alt="Noise Cancelling Headphones" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Noise Cancelling Headphones</div>
+          <div class="price">$149.00</div>
+          <div class="mt">
+            <a class="btn outline" href="product.html?id=73">View details</a>
+            <button class="btn btn-add" data-id="73" data-name="Noise Cancelling Headphones" data-price="149">Add to cart</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 8 -->
+      <div class="card">
+        <img src="assets/img/prod8.jpg" alt="USB‑C Dock" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">USB‑C Dock</div>
+          <div class="price">$59.00</div>
+          <div class="mt">
+            <a class="btn outline" href="product.html?id=18">View details</a>
+            <button class="btn btn-add" data-id="18" data-name="USB‑C Dock" data-price="59">Add to cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-2" style="padding:16px;">
+      <div class="flex flex-between">
+        <div>
+          <div class="title">Need help deciding?</div>
+          <div class="muted">Message us via the contact page — we usually reply within an hour.</div>
+        </div>
+        <a class="btn" href="contact.html">Contact support</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <a href="contact.html">Contact</a> ·
+    <a href="login.html">Login</a> ·
+    <a href="admin-login.html">Admin</a>
+    <div class="muted mt">© 2025 VulnShop Inc.</div>
+  </footer>
+
+  <!-- Logger + app (optional, for logging and cart helper) -->
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Hook add-to-cart buttons
+      document.querySelectorAll('.btn-add').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const id = Number(btn.dataset.id);
+          const name = btn.dataset.name || ('Product #' + id);
+          const price = Number(btn.dataset.price || 0);
+          if (window.Cart && typeof Cart.add === 'function') {
+            Cart.add(id, 1);
+          } else {
+            // Fallback cart if app.js not loaded
+            try {
+              const key = 'vulnshop_cart';
+              const items = JSON.parse(localStorage.getItem(key) || '[]');
+              const found = items.find(i => i.id === id);
+              if (found) found.qty += 1; else items.push({ id, qty: 1 });
+              localStorage.setItem(key, JSON.stringify(items));
+            } catch {}
+          }
+          if (window.VulnLogger) {
+            VulnLogger.logFormSubmit('add_to_cart', { product_id: id, name, price, qty: 1 });
+          }
+          btn.textContent = 'Added!';
+          setTimeout(() => (btn.textContent = 'Add to cart'), 900);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

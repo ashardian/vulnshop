@@ -1,0 +1,37 @@
+<!-- vulnshop/upload.html -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" /><title>Upload — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Product Image Upload</h1>
+    <form id="upload-form">
+      <input type="file" id="file" required />
+      <button>Upload</button>
+    </form>
+    <pre id="out" class="mt"></pre>
+  </main>
+  <script src="assets/js/logger.js"></script>
+  <script>
+    const form = document.getElementById("upload-form");
+    const out = document.getElementById("out");
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const file = document.getElementById("file").files[0];
+      if (!file) return;
+      out.textContent = "Uploading...";
+      try {
+        const res = await VulnLogger.uploadFile(file, { scope: "product" });
+        out.textContent = JSON.stringify(res, null, 2);
+        if (res?.key) VulnLogger.logFileUpload({ key: res.key, name: file.name, size: file.size });
+      } catch (e2) {
+        out.textContent = "Upload failed";
+      }
+    });
+  </script>
+</body>
+</html>

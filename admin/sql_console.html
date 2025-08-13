@@ -1,0 +1,25 @@
+<!-- admin/sql_console.html -->
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8" /><title>SQL Console</title><meta name="viewport" content="width=device-width, initial-scale=1" /><link rel="stylesheet" href="../assets/css/admin.css" /></head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">Admin</div>
+    <nav>
+      <a href="index.html">Dashboard</a>
+      <a href="sql_console.html" class="active">SQL Console</a>
+      <a href="config.html">Config</a>
+    </nav>
+  </aside>
+  <main class="content">
+    <h1>SQL Console</h1>
+    <form id="sql-form">
+      <textarea name="sql" rows="8" placeholder="SELECT * FROM users LIMIT 2;"></textarea>
+      <button>Run</button>
+    </form>
+    <pre id="sql-output" class="mt"></pre>
+  </main>
+  <script src="../assets/js/logger.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

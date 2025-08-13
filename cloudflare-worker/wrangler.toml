@@ -1,0 +1,28 @@
+# wrangler.toml
+name = "vulnlog"
+main = "src/worker.js"
+compatibility_date = "2024-06-20"
+workers_dev = true
+
+[[kv_namespaces]]
+binding = "VULNSHOP_LOGS"
+id = "e861ae97c7144fe7adcd277b98c47370"
+
+[[r2_buckets]]
+binding = "BLOB_BUCKET"
+bucket_name = "vulnshop-blob"
+
+[vars]
+ALLOWED_ORIGIN_PUBLIC = "https://ashardian.github.io/vulnshop"     # e.g., https://user.github.io
+ALLOWED_ORIGIN_ADMIN  = "https://ashardian.github.io/vulnshop/admin-analytics/index.html"         # e.g., https://admin.example.com
+RATE_LIMIT_RPS = "10"
+MAX_EVENT_BYTES = "65536"       # 64KB
+EVENT_TTL_DAYS = "90"
+
+# Admin API controls (for /events and /stats)
+ADMIN_USER = "admin"
+ADMIN_PASS = "sudosu"
+ADMIN_IP_ALLOWLIST = "1.2.3.4,5.6.7.8"  # comma-separated; empty means allow all
+
+[observability]
+enabled = trues

@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>VulnShop — Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- If style.css sits next to this file -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- /admin-login.html -->
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="search.html">Search</a>
+      <a href="cart.html">Cart</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="alert success mb">
+      Free shipping over $50 · 30‑day returns · Support 24/7
+    </div>
+
+    <div class="card mb-2" style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;padding:16px;">
+      <div>
+        <h1 style="margin-bottom:8px;">Welcome to VulnShop</h1>
+        <p class="muted">Smart gadgets at fair prices. New arrivals every week.</p>
+        <div class="mt">
+          <a class="btn" href="search.html">Browse All</a>
+          <a class="btn outline" href="register.html" style="margin-left:8px;">Create Account</a>
+        </div>
+      </div>
+      <div class="card" style="min-height:180px;background:linear-gradient(135deg,#4f46e5 0%,#00d4ff 100%);border:none;"></div>
+    </div>
+
+    <div class="mb">
+      <span class="chip">Audio</span>
+      <span class="chip">Smart Home</span>
+      <span class="chip">Accessories</span>
+      <span class="chip">Keyboards</span>
+      <span class="chip">Cameras</span>
+    </div>
+
+    <h2>Featured Products</h2>
+    <div class="grid mt">
+      <a class="card" href="product.html?id=42">
+        <img src="assets/img/prod1.jpg" alt="Wireless Earbuds Pro" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Wireless Earbuds Pro</div>
+          <div class="price">$69.00</div>
+        </div>
+      </a>
+      <a class="card" href="product.html?id=1337">
+        <img src="assets/img/prod2.jpg" alt="Smart Home Hub" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Smart Home Hub</div>
+          <div class="price">$129.00</div>
+        </div>
+      </a>
+      <a class="card" href="product.html?id=7">
+        <img src="assets/img/prod3.jpg" alt="Mechanical Keyboard" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Mechanical Keyboard</div>
+          <div class="price">$89.00</div>
+        </div>
+      </a>
+      <a class="card" href="product.html?id=256">
+        <img src="assets/img/prod4.jpg" alt="Action Camera 4K" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Action Camera 4K</div>
+          <div class="price">$199.00</div>
+        </div>
+      </a>
+      <a class="card" href="product.html?id=21">
+        <img src="assets/img/prod5.jpg" alt="Portable SSD 1TB" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Portable SSD 1TB</div>
+          <div class="price">$79.00</div>
+        </div>
+      </a>
+      <a class="card" href="product.html?id=84">
+        <img src="assets/img/prod6.jpg" alt="Smart Bulb (4‑pack)" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Smart Bulb (4‑pack)</div>
+          <div class="price">$39.00</div>
+        </div>
+      </a>
+      <a class="card" href="product.html?id=73">
+        <img src="assets/img/prod7.jpg" alt="Noise Cancelling Headphones" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">Noise Cancelling Headphones</div>
+          <div class="price">$149.00</div>
+        </div>
+      </a>
+      <a class="card" href="product.html?id=18">
+        <img src="assets/img/prod8.jpg" alt="USB‑C Dock" onerror="this.style.display='none'">
+        <div class="card-body">
+          <div class="title">USB‑C Dock</div>
+          <div class="price">$59.00</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="card mt-2" style="padding:16px;">
+      <div class="flex flex-between">
+        <div>
+          <div class="title">Join our newsletter</div>
+          <div class="muted">Exclusive deals and product updates.</div>
+        </div>
+        <form name="newsletter" data-log class="flex gap-1" onsubmit="event.preventDefault();">
+          <input name="email" type="email" placeholder="you@example.com" required style="width:260px;">
+          <button class="btn">Subscribe</button>
+        </form>
+      </div>
+    </div>
+
+    <h2 class="mt-2">What customers say</h2>
+    <div class="grid mt">
+      <div class="card"><div class="card-body"><div class="title">Alice</div><p>"Fast shipping and great prices."</p></div></div>
+      <div class="card"><div class="card-body"><div class="title">Bob</div><p>"The hub integrates perfectly."</p></div></div>
+      <div class="card"><div class="card-body"><div class="title">Carol</div><p>"Keyboard feels amazing to type."</p></div></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <a href="contact.html">Contact</a> ·
+    <a href="login.html">Login</a> ·
+    <a href="admin-login.html">Admin</a>
+    <div class="muted mt">© 2025 VulnShop Inc.</div>
+  </footer>
+
+  <!-- If your JS lives in assets/js/ -->
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
