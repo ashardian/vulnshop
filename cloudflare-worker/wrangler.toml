@@ -5,7 +5,7 @@ compatibility_date = "2024-06-20"
 workers_dev = true
 
 [[kv_namespaces]]
-binding = "HONEYPOT_KV"
+binding = "LOGS"
 id = "e861ae97c7144fe7adcd277b98c47370"
 
 [[r2_buckets]]
