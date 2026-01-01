@@ -20,8 +20,9 @@
 - **Multiple Attack Vectors**: SQL Injection, XSS, Command Injection, SSRF, XXE, and more
 - **Educational Focus**: Each vulnerability includes examples and payloads
 - **Easy Setup**: Simple static HTML/JS application, no complex dependencies
-- **Modern UI**: Beautiful, responsive design with dark theme
+- **Modern UI**: Beautiful, responsive design with **Light/Dark Mode** toggle
 - **GitHub Pages Ready**: Works perfectly when deployed to GitHub Pages
+- **No Backend Required**: Fully client-side, works offline
 
 ## 📋 Table of Contents
 

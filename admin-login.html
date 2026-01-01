@@ -8,15 +8,24 @@
   <link rel="stylesheet" href="assets/css/admin.css" />
 </head>
 <body>
-  <main class="container">
-    <h1>Admin Login</h1>
-    <p class="muted">Administrator access portal. Multiple authentication vulnerabilities present.</p>
-    
-    <form id="admin-login-form">
-      <label>Username <input name="username" autocomplete="off" /></label>
-      <label>Password <input type="password" name="password" autocomplete="off" /></label>
-      <button>Sign In</button>
-    </form>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+    </nav>
+  </header>
+
+  <main class="container" style="max-width: 400px; margin-top: 60px;">
+    <div class="card" style="padding: 32px;">
+      <h1 style="text-align: center; margin-bottom: 8px;">Admin Login</h1>
+      <p class="muted" style="text-align: center; margin-bottom: 24px;">Administrator access portal. Multiple authentication vulnerabilities present.</p>
+      
+      <form id="admin-login-form">
+        <label>Username <input name="username" autocomplete="off" placeholder="admin" /></label>
+        <label>Password <input type="password" name="password" autocomplete="off" placeholder="••••••••" /></label>
+        <button type="submit" class="btn" style="width: 100%; margin-top: 8px;">Sign In</button>
+      </form>
     
     <div class="card mt" style="background: #fff3cd; border: 2px solid #ffc107; padding: 16px;">
       <h3>⚠️ Authentication Vulnerabilities</h3>
@@ -41,6 +50,7 @@
       </ul>
     </div>
   </main>
+    <script src="assets/js/theme.js"></script>
   <script src="assets/js/logger.js"></script>
   <script src="assets/js/app.js"></script>
 </body>

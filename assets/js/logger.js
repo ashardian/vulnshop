@@ -1,38 +1,15 @@
-// vulnshop/assets/js/logger.js
+// vulnshop/assets/js/logger.js - Simplified version without Cloudflare Worker
 (function () {
-  const WORKER_ENDPOINT = "https://<your-worker-subdomain>.workers.dev";
-  const MAX_RETRIES = 2;
-
-  async function post(path, bodyObj) {
-    const url = `${WORKER_ENDPOINT}${path}`;
-    const body = JSON.stringify(bodyObj);
-    if (navigator.sendBeacon && path === "/log") {
-      const blob = new Blob([body], { type: "application/json" });
-      navigator.sendBeacon(url, blob);
-      return;
+  // Logger that works without backend - just logs to console
+  function logToConsole(eventType, payload) {
+    if (console && console.log) {
+      console.log(`[VulnLogger] ${eventType}:`, payload);
     }
-    let lastErr;
-    for (let i = 0; i <= MAX_RETRIES; i++) {
-      try {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body,
-          keepalive: true,
-          mode: "cors",
-        });
-        if (res.ok) return;
-      } catch (e) {
-        lastErr = e;
-      }
-      await new Promise((r) => setTimeout(r, 200 * (i + 1)));
-    }
-    console.debug("logger: failed", lastErr);
   }
 
   function baseEvent(eventType, payload) {
     return {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
       ts: Date.now(),
       event_type: eventType,
       url: location.pathname + location.search,
@@ -40,39 +17,33 @@
     };
   }
 
-  function startHeartbeat() {
-    // Send a heartbeat every 30s for long sessions (sampled)
-    if (Math.random() < 0.2) {
-      setInterval(() => post("/log", baseEvent("heartbeat", { t: Date.now() })), 30000);
-    }
-  }
-
   window.VulnLogger = {
     logPageView() {
-      post("/log", baseEvent("page_view", { title: document.title }));
-      startHeartbeat();
+      logToConsole('page_view', baseEvent("page_view", { title: document.title }));
     },
     logSearch(q) {
-      post("/log", baseEvent("search", { q: String(q || "") }));
+      logToConsole('search', baseEvent("search", { q: String(q || "") }));
     },
     logFormSubmit(name, data) {
-      post("/log", baseEvent("form_submit", { form: name, data }));
+      logToConsole('form_submit', baseEvent("form_submit", { form: name, data }));
     },
     logAdminLogin(username) {
-      post("/log", baseEvent("admin_login", { username }));
+      logToConsole('admin_login', baseEvent("admin_login", { username }));
     },
     logSqlConsole(sql) {
-      post("/log", baseEvent("sql_console", { sql }));
+      logToConsole('sql_console', baseEvent("sql_console", { sql }));
     },
     logFileUpload(meta) {
-      post("/log", baseEvent("file_upload", meta));
+      logToConsole('file_upload', baseEvent("file_upload", meta));
     },
     uploadFile(file, extra = {}) {
-      const form = new FormData();
-      form.append("file", file);
-      form.append("filename", file.name);
-      for (const [k, v] of Object.entries(extra)) form.append(k, v);
-      return fetch(`${WORKER_ENDPOINT}/upload`, { method: "POST", body: form, mode: "cors" }).then((r) => r.json());
+      // Simulate file upload
+      return Promise.resolve({
+        key: `upload_${Date.now()}_${file.name}`,
+        name: file.name,
+        size: file.size,
+        ...extra
+      });
     },
   };
 })();

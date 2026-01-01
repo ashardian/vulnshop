@@ -3,54 +3,46 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Vulnshop Admin – Sign in</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/css/styles.css" rel="stylesheet">
+  <title>Vulnshop Admin Dashboard</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
 </head>
-<body class="login-body">
-  <div class="container d-flex align-items-center justify-content-center min-vh-100">
-    <div class="card shadow-lg login-card">
-      <div class="card-body p-4">
-        <h1 class="h4 mb-3 text-center">Acme Admin</h1>
-        <p id="flash" class="text-danger small"></p>
-
-        <!-- Intentionally simple, no CSRF token; action points to dashboard.html for demo -->
-        <form id="loginForm" method="POST" action="dashboard.html">
-          <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input name="username" class="form-control" autocomplete="off">
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" placeholder="•••••••••••">
-          </div>
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="remember" name="remember">
-              <label class="form-check-label" for="remember">Remember me</label>
-            </div>
-            <a href="#" class="link-secondary small">Forgot password?</a>
-          </div>
-          <button class="btn btn-primary w-100" type="submit">Sign in</button>
-        </form>
-
-        <div class="text-center mt-3 small text-muted">
-          Tip: try user <code>admin</code> with any password.
-        </div>
+<body>
+  <aside class="sidebar">
+    <div class="logo">Admin Panel</div>
+    <nav>
+      <a href="index.html" class="active">Dashboard</a>
+      <a href="sql_console.html">SQL Console</a>
+      <a href="config.html">Config</a>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" style="margin-top: 16px; width: 100%;">🌙</button>
+    </nav>
+  </aside>
+  <main class="content">
+    <h1>Admin Dashboard</h1>
+    <p class="muted">Welcome to the admin panel. This area contains various administrative functions.</p>
+    
+    <div class="cards">
+      <div class="card">
+        <div class="card-title">Total Users</div>
+        <div class="card-value">1,234</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Active Sessions</div>
+        <div class="card-value">42</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Security Alerts</div>
+        <div class="card-value">7</div>
       </div>
     </div>
-  </div>
 
-  <script src="assets/js/app.js"></script>
-  <script src="assets/js/logger.js"></script>
-  <script>
-    // Fake auth: accept any username, but keep it client-side
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
-      const u = this.username.value || 'guest';
-      sessionStorage.setItem('user', u); // no secure flags – intentional
-      // leak via querystring for testers to spot
-      this.action = 'dashboard.html?user=' + encodeURIComponent(u) + '&msg=' + (new URLSearchParams(location.search).get('msg')||'');
-    });
-  </script>
+    <div class="card mt-2">
+      <div class="card-title">Recent Activity</div>
+      <p class="muted">No recent activity to display.</p>
+    </div>
+  </main>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/logger.js"></script>
+  <script src="../assets/js/app.js"></script>
 </body>
 </html>

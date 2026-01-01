@@ -3,12 +3,21 @@
 <html lang="en">
 <head><meta charset="utf-8" /><title>SQL Console</title><meta name="viewport" content="width=device-width, initial-scale=1" /><link rel="stylesheet" href="../assets/css/admin.css" /></head>
 <body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+    </nav>
+  </header>
+
   <aside class="sidebar">
     <div class="logo">Admin</div>
     <nav>
       <a href="index.html">Dashboard</a>
       <a href="sql_console.html" class="active">SQL Console</a>
       <a href="config.html">Config</a>
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
     </nav>
   </aside>
   <main class="content">
@@ -33,5 +42,6 @@
   </main>
   <script src="../assets/js/logger.js"></script>
   <script src="../assets/js/app.js"></script>
+  <script src="assets/js/theme.js"></script>
 </body>
 </html>
