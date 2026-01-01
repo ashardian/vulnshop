@@ -1,15 +1,45 @@
 <!-- admin-login.html -->
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8" /><title>Admin Login</title><meta name="viewport" content="width=device-width, initial-scale=1" /><link rel="stylesheet" href="assets/css/admin.css" /></head>
+<head>
+  <meta charset="utf-8" />
+  <title>Admin Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/admin.css" />
+</head>
 <body>
   <main class="container">
     <h1>Admin Login</h1>
+    <p class="muted">Administrator access portal. Multiple authentication vulnerabilities present.</p>
+    
     <form id="admin-login-form">
-      <label>Username <input name="username" /></label>
-      <label>Password <input type="password" name="password" /></label>
+      <label>Username <input name="username" autocomplete="off" /></label>
+      <label>Password <input type="password" name="password" autocomplete="off" /></label>
       <button>Sign In</button>
     </form>
+    
+    <div class="card mt" style="background: #fff3cd; border: 2px solid #ffc107; padding: 16px;">
+      <h3>⚠️ Authentication Vulnerabilities</h3>
+      <ul>
+        <li><strong>Default Credentials:</strong> admin / admin (or any password)</li>
+        <li><strong>SQL Injection:</strong> Username: <code>admin'--</code> (bypasses password)</li>
+        <li><strong>No Rate Limiting:</strong> Vulnerable to brute force attacks</li>
+        <li><strong>Weak Session Management:</strong> Session tokens in URL parameters</li>
+        <li><strong>No 2FA/MFA:</strong> Single factor authentication only</li>
+        <li><strong>Verbose Error Messages:</strong> Reveals if username exists</li>
+        <li><strong>No Account Lockout:</strong> Unlimited login attempts</li>
+        <li><strong>Password in GET Request:</strong> Passwords logged in server logs</li>
+      </ul>
+      
+      <h3>Attack Vectors:</h3>
+      <ul>
+        <li><strong>SQL Injection:</strong> <code>admin' OR '1'='1'--</code></li>
+        <li><strong>NoSQL Injection:</strong> <code>{"$ne": null}</code></li>
+        <li><strong>LDAP Injection:</strong> <code>admin)(|(uid=*</code></li>
+        <li><strong>Default Credentials:</strong> admin / admin</li>
+        <li><strong>Session Fixation:</strong> Manipulate session tokens</li>
+      </ul>
+    </div>
   </main>
   <script src="assets/js/logger.js"></script>
   <script src="assets/js/app.js"></script>

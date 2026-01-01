@@ -8,10 +8,40 @@
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+      <a href="login.html">Login</a>
+    </nav>
+  </header>
   <main class="container">
-    <h1>Search</h1>
-    <form id="search-form"><input id="search-input" placeholder="Search products"><button>Search</button></form>
+    <h1>Search Products</h1>
+    <form id="search-form" method="GET" action="search.html">
+      <input id="search-input" name="q" placeholder="Search products" value="">
+      <button>Search</button>
+    </form>
     <div id="search-results" class="mt"></div>
+    <script>
+      // VULNERABLE: Reflected XSS in search parameter
+      const params = new URLSearchParams(location.search);
+      const query = params.get('q');
+      const searchInput = document.getElementById('search-input');
+      const searchResults = document.getElementById('search-results');
+      
+      if (query) {
+        searchInput.value = query;
+        // VULNERABLE: Direct innerHTML without sanitization
+        searchResults.innerHTML = `Results for "<strong>${query}</strong>": (0 found)`;
+      }
+      
+      // Also check URL hash for DOM-based XSS
+      if (location.hash) {
+        const hashQuery = decodeURIComponent(location.hash.substring(1));
+        searchResults.innerHTML += `<p>Hash query: ${hashQuery}</p>`;
+      }
+    </script>
   </main>
   <script src="assets/js/logger.js"></script>
   <script src="assets/js/app.js"></script>

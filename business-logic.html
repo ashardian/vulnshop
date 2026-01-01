@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Business Logic — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="checkout.html">Checkout</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Business Logic Vulnerabilities</h1>
+    <p class="muted">Various business logic flaws for testing.</p>
+
+    <div class="card mt">
+      <h2>1. Price Manipulation</h2>
+      <p>Modify product prices in cart:</p>
+      <div id="cart-items"></div>
+      <form id="cart-form">
+        <input type="number" name="product_id" placeholder="Product ID" required>
+        <input type="number" name="price" placeholder="Price" step="0.01" required>
+        <button type="submit">Add to Cart</button>
+      </form>
+      <pre id="cart-output" class="mt"></pre>
+      <script>
+        let cart = [];
+        function updateCart() {
+          const container = document.getElementById('cart-items');
+          container.innerHTML = '<h3>Cart Items:</h3>';
+          cart.forEach(item => {
+            container.innerHTML += `<div class="card mt"><p>Product ${item.id}: $${item.price}</p></div>`;
+          });
+        }
+        document.getElementById('cart-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          // VULNERABLE: Client-side price validation only
+          cart.push({
+            id: formData.get('product_id'),
+            price: parseFloat(formData.get('price'))
+          });
+          updateCart();
+          document.getElementById('cart-output').textContent = 'Item added. Price can be manipulated client-side!';
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>2. Race Condition - Coupon Application</h2>
+      <p>Apply discount coupon multiple times:</p>
+      <form id="coupon-form">
+        <input type="text" name="coupon" placeholder="COUPON50" required>
+        <button type="submit">Apply Coupon</button>
+      </form>
+      <div id="coupon-output" class="mt"></div>
+      <script>
+        let discount = 0;
+        document.getElementById('coupon-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const coupon = e.target.coupon.value;
+          // VULNERABLE: Race condition - no server-side validation
+          const response = await fetch('/api/apply-coupon?coupon=' + encodeURIComponent(coupon), {
+            method: 'POST'
+          });
+          discount += 50;
+          document.getElementById('coupon-output').innerHTML = 
+            `<p>Coupon applied! Total discount: $${discount}</p>
+             <p class="muted">Vulnerable to race condition - apply multiple times rapidly!</p>`;
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>3. Negative Quantity</h2>
+      <p>Add negative quantities to cart:</p>
+      <form id="qty-form">
+        <input type="number" name="product_id" placeholder="Product ID" required>
+        <input type="number" name="quantity" placeholder="Quantity (try -10)" required>
+        <button type="submit">Update Quantity</button>
+      </form>
+      <pre id="qty-output" class="mt"></pre>
+      <script>
+        document.getElementById('qty-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+          const qty = parseInt(formData.get('quantity'));
+          // VULNERABLE: Negative quantity not properly validated
+          document.getElementById('qty-output').textContent = 
+            `Product ${formData.get('product_id')}: Quantity = ${qty}\n` +
+            `Total: $${(qty * 10).toFixed(2)}\n` +
+            `Negative quantity can result in credit/refund!`;
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>4. Time-based Logic Flaw</h2>
+      <p>Access premium features by manipulating time:</p>
+      <form id="premium-form">
+        <input type="datetime-local" name="expiry" required>
+        <button type="submit">Set Premium Expiry</button>
+      </form>
+      <pre id="premium-output" class="mt"></pre>
+      <script>
+        document.getElementById('premium-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const expiry = new Date(e.target.expiry.value);
+          const now = new Date();
+          // VULNERABLE: Client-side time validation
+          if (expiry > now) {
+            document.getElementById('premium-output').textContent = 
+              `Premium access granted until: ${expiry.toLocaleString()}\n` +
+              `Vulnerable to time manipulation!`;
+          } else {
+            document.getElementById('premium-output').textContent = 'Invalid expiry date';
+          }
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>5. Workflow Bypass</h2>
+      <p>Skip payment step in checkout:</p>
+      <form id="checkout-form">
+        <input type="text" name="step" placeholder="step (try: confirm)" value="payment">
+        <button type="submit">Proceed to Next Step</button>
+      </form>
+      <pre id="checkout-output" class="mt"></pre>
+      <script>
+        document.getElementById('checkout-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const step = e.target.step.value;
+          // VULNERABLE: Can skip payment step
+          const steps = ['cart', 'payment', 'confirm', 'complete'];
+          const currentIndex = steps.indexOf(step);
+          if (currentIndex >= 0 && currentIndex < steps.length - 1) {
+            document.getElementById('checkout-output').textContent = 
+              `Current step: ${step}\n` +
+              `Next step: ${steps[currentIndex + 1]}\n` +
+              `Vulnerable to workflow bypass - can skip payment!`;
+          } else {
+            document.getElementById('checkout-output').textContent = 
+              `Step ${step} completed!\n` +
+              `Order processed without payment verification.`;
+          }
+        });
+      </script>
+    </div>
+  </main>
+
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

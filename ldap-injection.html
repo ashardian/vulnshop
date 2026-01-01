@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>LDAP Search — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="admin/index.html">Admin</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>LDAP User Directory</h1>
+    <p class="muted">Search for users in the corporate directory.</p>
+
+    <div class="card mt">
+      <h2>Search Users</h2>
+      <form id="ldap-form">
+        <input type="text" name="username" placeholder="Username" required style="width: 300px;">
+        <button type="submit">Search</button>
+      </form>
+      <pre id="ldap-output" class="mt"></pre>
+      <script>
+        document.getElementById('ldap-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const username = e.target.username.value;
+          const output = document.getElementById('ldap-output');
+          output.textContent = 'Searching...';
+          
+          // VULNERABLE: LDAP Injection
+          try {
+            const response = await fetch('/api/ldap-search?username=' + encodeURIComponent(username));
+            const data = await response.json();
+            output.textContent = JSON.stringify(data, null, 2);
+          } catch (err) {
+            // Simulate LDAP injection
+            if (username.includes('*') || username.includes(')') || username.includes('(') || username.includes('|')) {
+              output.textContent = 'LDAP Injection Detected!\n\n' +
+                'Query: (cn=' + username + ')\n\n' +
+                'Results (all users extracted):\n' +
+                'dn: cn=admin,ou=users,dc=vulnshop,dc=com\n' +
+                '  cn: admin\n' +
+                '  mail: admin@vulnshop.com\n' +
+                '  userPassword: {SSHA}abc123...\n\n' +
+                'dn: cn=alice,ou=users,dc=vulnshop,dc=com\n' +
+                '  cn: alice\n' +
+                '  mail: alice@vulnshop.com\n' +
+                '  userPassword: {SSHA}def456...\n\n' +
+                'dn: cn=bob,ou=users,dc=vulnshop,dc=com\n' +
+                '  cn: bob\n' +
+                '  mail: bob@vulnshop.com\n' +
+                '  userPassword: {SSHA}ghi789...';
+            } else {
+              output.textContent = 'User not found';
+            }
+          }
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>LDAP Injection Payloads</h2>
+      <h3>1. Wildcard Injection:</h3>
+      <ul>
+        <li><code>*</code> - Returns all users</li>
+        <li><code>admin*</code> - Returns users starting with "admin"</li>
+        <li><code>*)(uid=*</code> - Bypass filter</li>
+      </ul>
+
+      <h3>2. Boolean-based Injection:</h3>
+      <ul>
+        <li><code>admin)(|(uid=*</code> - OR condition</li>
+        <li><code>admin)(&(uid=*</code> - AND condition</li>
+        <li><code>admin)(!(uid=test</code> - NOT condition</li>
+      </ul>
+
+      <h3>3. Authentication Bypass:</h3>
+      <ul>
+        <li><code>admin)(&</code> - Always true</li>
+        <li><code>*)(|(password=*</code> - Bypass password check</li>
+        <li><code>admin)(|(1=1</code> - Always true condition</li>
+      </ul>
+
+      <h3>4. Information Disclosure:</h3>
+      <ul>
+        <li><code>*)(cn=*</code> - Extract all common names</li>
+        <li><code>*)(mail=*</code> - Extract all email addresses</li>
+        <li><code>*)(userPassword=*</code> - Extract password hashes</li>
+      </ul>
+    </div>
+  </main>
+
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

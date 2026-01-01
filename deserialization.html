@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Data Import — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VulnShop</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="admin/index.html">Admin</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Data Import Tool</h1>
+    <p class="muted">Import serialized data from external sources.</p>
+
+    <div class="card mt">
+      <h2>Import Serialized Data</h2>
+      <p>Supports PHP, Python pickle, Java serialization, and JSON:</p>
+      <form id="import-form">
+        <select name="format" required>
+          <option value="php">PHP Serialize</option>
+          <option value="python">Python Pickle</option>
+          <option value="java">Java Serialize</option>
+          <option value="json">JSON</option>
+        </select>
+        <textarea name="data" rows="8" placeholder="Paste serialized data" style="width: 100%; font-family: monospace;" required></textarea>
+        <button type="submit">Import</button>
+      </form>
+      <pre id="import-output" class="mt"></pre>
+      <script>
+        document.getElementById('import-form').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const format = e.target.format.value;
+          const data = e.target.data.value;
+          const output = document.getElementById('import-output');
+          output.textContent = 'Processing...';
+          
+          // VULNERABLE: Insecure Deserialization
+          try {
+            const response = await fetch('/api/import', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ format, data })
+            });
+            const result = await response.json();
+            output.textContent = JSON.stringify(result, null, 2);
+          } catch (err) {
+            // Simulate deserialization
+            if (data.includes('__destruct') || data.includes('__wakeup') || data.includes('RCE') || data.includes('system')) {
+              output.textContent = 'Deserialization Attack Detected!\n\n' +
+                'Potential RCE payloads executed:\n' +
+                '- PHP: O:8:"stdClass":1:{s:4:"test";s:10:"__destruct";}\n' +
+                '- Python: pickle.loads() can execute arbitrary code\n' +
+                '- Java: ObjectInputStream can deserialize malicious objects\n' +
+                '- JSON: Prototype pollution or code injection';
+            } else {
+              output.textContent = 'Data imported successfully';
+            }
+          }
+        });
+      </script>
+    </div>
+
+    <div class="card mt">
+      <h2>Deserialization Attack Payloads</h2>
+      <h3>PHP Serialize:</h3>
+      <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>O:8:"stdClass":1:{s:4:"test";s:10:"__destruct";}
+O:4:"User":2:{s:4:"name";s:5:"admin";s:8:"is_admin";b:1;}</code></pre>
+
+      <h3>Python Pickle:</h3>
+      <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>c__builtin__
+system
+(S'id'
+tR.</code></pre>
+
+      <h3>Java Serialization:</h3>
+      <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>AC ED 00 05 73 72 00 11 6A 61 76 61 2E 75 74 69
+6C 2E 48 61 73 68 4D 61 70...</code></pre>
+
+      <h3>JSON Prototype Pollution:</h3>
+      <pre style="background: #f5f5f5; padding: 16px; overflow-x: auto;"><code>{"__proto__":{"isAdmin":true}}
+{"constructor":{"prototype":{"isAdmin":true}}}</code></pre>
+    </div>
+  </main>
+
+  <script src="assets/js/logger.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

