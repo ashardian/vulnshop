@@ -1,22 +1,146 @@
-<!-- cart.html -->
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8" /><title>Cart — VulnShop</title><meta name="viewport" content="width=device-width, initial-scale=1" /><link rel="stylesheet" href="assets/css/style.css" /></head>
+<head>
+  <meta charset="utf-8" />
+  <title>Cart — VulnShop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
 <body>
   <header class="topbar">
     <div class="brand">VulnShop</div>
     <nav>
       <a href="index.html">Home</a>
+      <a href="search.html">Search</a>
+      <a href="login.html">Login</a>
       <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
     </nav>
   </header>
 
   <main class="container">
-    <h1>Your Cart</h1>
-    <p>No items yet.</p>
-    <a class="btn" href="checkout.html">Checkout</a>
+    <h1>Your Shopping Cart</h1>
+    
+    <div id="cart-items"></div>
+    
+    <div id="cart-empty" class="card mt" style="text-align: center; padding: 40px;">
+      <p class="muted">Your cart is empty.</p>
+      <a href="index.html" class="btn mt">Continue Shopping</a>
+    </div>
+    
+    <div id="cart-summary" class="card mt-2" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h2>Order Summary</h2>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+        <span>Subtotal:</span>
+        <strong id="subtotal">$0.00</strong>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border);">
+        <span>Shipping:</span>
+        <span id="shipping">Free</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 8px 0; font-size: 1.25rem; font-weight: 600;">
+        <span>Total:</span>
+        <strong id="total">$0.00</strong>
+      </div>
+      <a href="checkout.html" class="btn" style="width: 100%; margin-top: 16px;">Proceed to Checkout</a>
+    </div>
+    
+    <script>
+      function loadCart() {
+        const cart = JSON.parse(localStorage.getItem('vulnshop_cart') || '[]');
+        const container = document.getElementById('cart-items');
+        const empty = document.getElementById('cart-empty');
+        const summary = document.getElementById('cart-summary');
+        
+        if (cart.length === 0) {
+          container.innerHTML = '';
+          empty.style.display = 'block';
+          summary.style.display = 'none';
+          return;
+        }
+        
+        empty.style.display = 'none';
+        summary.style.display = 'block';
+        
+        // Load products
+        fetch('assets/data/products.json')
+          .then(r => r.json())
+          .then(products => {
+            let html = '';
+            let subtotal = 0;
+            
+            cart.forEach(item => {
+              const product = products.find(p => p.id === item.id) || { 
+                id: item.id, 
+                name: `Product #${item.id}`, 
+                price: 99.00 
+              };
+              const itemTotal = product.price * item.qty;
+              subtotal += itemTotal;
+              
+              html += `
+                <div class="card mt" style="display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center;">
+                  <div style="width: 80px; height: 80px; background: var(--bg-secondary); border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 2rem;">📦</span>
+                  </div>
+                  <div>
+                    <h3 style="margin: 0 0 4px;">${product.name}</h3>
+                    <p class="muted" style="margin: 0;">$${product.price.toFixed(2)} each</p>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="margin-bottom: 8px;">
+                      <label>Qty: 
+                        <input type="number" value="${item.qty}" min="1" style="width: 60px;" 
+                               onchange="updateQty(${item.id}, this.value)">
+                      </label>
+                    </div>
+                    <div style="font-weight: 600; color: var(--success);">$${itemTotal.toFixed(2)}</div>
+                    <button class="btn outline" style="margin-top: 8px; font-size: 0.75rem; padding: 4px 8px;" 
+                            onclick="removeItem(${item.id})">Remove</button>
+                  </div>
+                </div>
+              `;
+            });
+            
+            container.innerHTML = html;
+            document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+            document.getElementById('total').textContent = '$' + subtotal.toFixed(2);
+          })
+          .catch(() => {
+            container.innerHTML = '<p class="muted">Error loading cart items.</p>';
+          });
+      }
+      
+      function updateQty(id, qty) {
+        const cart = JSON.parse(localStorage.getItem('vulnshop_cart') || '[]');
+        const item = cart.find(i => i.id === id);
+        if (item) {
+          item.qty = Math.max(1, parseInt(qty) || 1);
+          localStorage.setItem('vulnshop_cart', JSON.stringify(cart));
+          loadCart();
+        }
+      }
+      
+      function removeItem(id) {
+        const cart = JSON.parse(localStorage.getItem('vulnshop_cart') || '[]');
+        const filtered = cart.filter(i => i.id !== id);
+        localStorage.setItem('vulnshop_cart', JSON.stringify(filtered));
+        loadCart();
+      }
+      
+      loadCart();
+    </script>
   </main>
-    <script src="assets/js/theme.js"></script>
+
+  <footer class="footer">
+    <a href="contact.html">Contact</a> ·
+    <a href="login.html">Login</a> ·
+    <a href="admin-login.html">Admin</a>
+    <div class="muted mt">© 2025 VulnShop Inc.</div>
+  </footer>
+
+  <script src="assets/js/theme.js"></script>
   <script src="assets/js/logger.js"></script>
   <script src="assets/js/app.js"></script>
 </body>

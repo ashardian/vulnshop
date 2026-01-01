@@ -1,6 +1,10 @@
- vulnshop/assets/data/products.json
 [
   { "id": 42, "name": "Wireless Earbuds Pro", "price": 69.0, "img": "assets/img/prod1.jpg", "desc": "ANC, 24h battery." },
   { "id": 1337, "name": "Smart Home Hub", "price": 129.0, "img": "assets/img/prod2.jpg", "desc": "Connects all devices." },
-  { "id": 7, "name": "Mechanical Keyboard", "price": 89.0, "img": "assets/img/prod3.jpg", "desc": "Hot-swappable, RGB." }
+  { "id": 7, "name": "Mechanical Keyboard", "price": 89.0, "img": "assets/img/prod3.jpg", "desc": "Hot-swappable, RGB." },
+  { "id": 256, "name": "Action Camera 4K", "price": 199.0, "img": "assets/img/prod4.jpg", "desc": "4K video, waterproof." },
+  { "id": 21, "name": "Portable SSD 1TB", "price": 79.0, "img": "assets/img/prod5.jpg", "desc": "USB-C, fast transfer." },
+  { "id": 84, "name": "Smart Bulb (4-pack)", "price": 39.0, "img": "assets/img/prod6.jpg", "desc": "RGB, voice control." },
+  { "id": 73, "name": "Noise Cancelling Headphones", "price": 149.0, "img": "assets/img/prod7.jpg", "desc": "Premium sound quality." },
+  { "id": 18, "name": "USB-C Dock", "price": 59.0, "img": "assets/img/prod8.jpg", "desc": "Multiple ports, 4K output." }
 ]

