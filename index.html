@@ -33,16 +33,17 @@
       Free shipping over $50 · 30‑day returns · Support 24/7
     </div>
 
-    <div class="card mb-2" style="display:grid;grid-template-columns:1.2fr 1fr;gap:16px;padding:16px;">
+    <div class="card mb-2" style="display:grid;grid-template-columns:1.2fr 1fr;gap:24px;padding:32px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);border:1px solid rgba(99, 102, 241, 0.3);">
       <div>
-        <h1 style="margin-bottom:8px;">Welcome to VulnShop</h1>
-        <p class="muted">Smart gadgets at fair prices. New arrivals every week.</p>
-        <div class="mt">
-          <a class="btn" href="search.html">Browse All</a>
-          <a class="btn outline" href="register.html" style="margin-left:8px;">Create Account</a>
+        <h1 style="margin-bottom:12px;font-size:3rem;">Welcome to VulnShop</h1>
+        <p class="muted" style="font-size:1.1rem;margin-bottom:20px;">Advanced Penetration Testing Lab - Practice web application security vulnerabilities in a safe environment.</p>
+        <div class="mt" style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a class="btn" href="vulnerabilities.html">View Vulnerabilities</a>
+          <a class="btn outline" href="search.html">Browse Products</a>
+          <a class="btn outline" href="register.html">Create Account</a>
         </div>
       </div>
-      <div class="card" style="min-height:180px;background:linear-gradient(135deg,#4f46e5 0%,#00d4ff 100%);border:none;"></div>
+      <div class="card" style="min-height:200px;background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#ec4899 100%);border:none;display:flex;align-items:center;justify-content:center;color:white;font-size:4rem;font-weight:900;text-shadow:0 4px 12px rgba(0,0,0,0.3);">🔓</div>
     </div>
 
     <div class="mb">
@@ -133,85 +134,102 @@
       <div class="card"><div class="card-body"><div class="title">Carol</div><p>"Keyboard feels amazing to type."</p></div></div>
     </div>
 
-    <div class="card mt-2" style="background: #fff3cd; border: 2px solid #ffc107; padding: 24px;">
-      <h2>🔓 Penetration Testing Lab</h2>
-      <p class="muted">This application contains intentional vulnerabilities for security testing and education.</p>
-      <div class="grid mt" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-        <a href="xss.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">XSS Testing</div>
+    <div class="card mt-2" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(6, 182, 212, 0.15) 100%); border: 2px solid rgba(99, 102, 241, 0.4); padding: 32px; backdrop-filter: blur(10px);">
+      <div style="text-align:center;margin-bottom:24px;">
+        <h2 style="font-size:2.5rem;margin-bottom:12px;">🔓 Penetration Testing Lab</h2>
+        <p class="muted" style="font-size:1.1rem;">This application contains intentional vulnerabilities for security testing and education.</p>
+      </div>
+      <div class="grid mt" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+        <a href="xss.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">XSS Testing</div>
             <p class="muted small">Reflected, Stored, DOM-based</p>
           </div>
         </a>
-        <a href="admin/sql_console.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">SQL Injection</div>
+        <a href="admin/sql_console.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">SQL Injection</div>
             <p class="muted small">Multiple injection types</p>
           </div>
         </a>
-        <a href="cmd-injection.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">Command Injection</div>
+        <a href="cmd-injection.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">Command Injection</div>
             <p class="muted small">OS command execution</p>
           </div>
         </a>
-        <a href="path-traversal.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">Path Traversal</div>
+        <a href="path-traversal.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">Path Traversal</div>
             <p class="muted small">Directory traversal</p>
           </div>
         </a>
-        <a href="xxe.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">XXE</div>
+        <a href="xxe.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">XXE</div>
             <p class="muted small">XML External Entity</p>
           </div>
         </a>
-        <a href="ssrf.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">SSRF</div>
+        <a href="ssrf.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">SSRF</div>
             <p class="muted small">Server-Side Request Forgery</p>
           </div>
         </a>
-        <a href="api.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">API Vulnerabilities</div>
+        <a href="api.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">API Vulnerabilities</div>
             <p class="muted small">IDOR, NoSQL, JWT</p>
           </div>
         </a>
-        <a href="csrf.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">CSRF</div>
+        <a href="csrf.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">CSRF</div>
             <p class="muted small">Cross-Site Request Forgery</p>
           </div>
         </a>
-        <a href="deserialization.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">Deserialization</div>
+        <a href="deserialization.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">Deserialization</div>
             <p class="muted small">Insecure deserialization</p>
           </div>
         </a>
-        <a href="business-logic.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">Business Logic</div>
+        <a href="business-logic.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">Business Logic</div>
             <p class="muted small">Logic flaws & race conditions</p>
           </div>
         </a>
-        <a href="ldap-injection.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">LDAP Injection</div>
+        <a href="ldap-injection.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">LDAP Injection</div>
             <p class="muted small">LDAP query injection</p>
           </div>
         </a>
-        <a href="upload.html" class="card" style="text-decoration: none; color: inherit;">
-          <div class="card-body">
-            <div class="title">File Upload</div>
+        <a href="upload.html" class="card" style="text-decoration: none; color: inherit; position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;right:0;width:60px;height:60px;background:linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2));border-radius:0 0 0 100%;"></div>
+          <div class="card-body" style="position:relative;z-index:1;">
+            <div class="title" style="font-size:1.2rem;margin-bottom:8px;">File Upload</div>
             <p class="muted small">Unrestricted file upload</p>
           </div>
         </a>
       </div>
-      <div class="mt" style="text-align: center;">
-        <a href="vulnerabilities.html" class="btn">View Complete Vulnerability Index</a>
+      <div class="mt" style="text-align: center;padding-top:20px;">
+        <a href="vulnerabilities.html" class="btn" style="font-size:1.1rem;padding:16px 32px;">View Complete Vulnerability Index →</a>
+      </div>
+      <div style="text-align:center;margin-top:16px;">
+        <p class="muted">💡 <strong>Tip:</strong> All vulnerabilities are documented with examples and payloads. Perfect for learning and practice!</p>
       </div>
     </div>
   </main>

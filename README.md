@@ -3,6 +3,9 @@
 ![VulnShop](https://img.shields.io/badge/VulnShop-Pentesting%20Lab-red)
 ![OWASP](https://img.shields.io/badge/OWASP-Top%2010-orange)
 ![License](https://img.shields.io/badge/License-MIT-blue)
+![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Ready-brightgreen)
+
+> **🌐 Live Demo**: This application works perfectly on GitHub Pages! See [Installation](#-installation) section for deployment instructions.
 
 **VulnShop** is a deliberately vulnerable web application designed for security professionals, penetration testers, and cybersecurity students to practice and learn about web application security vulnerabilities. This application contains multiple real-world vulnerabilities based on the OWASP Top 10 and beyond.
 
@@ -17,6 +20,8 @@
 - **Multiple Attack Vectors**: SQL Injection, XSS, Command Injection, SSRF, XXE, and more
 - **Educational Focus**: Each vulnerability includes examples and payloads
 - **Easy Setup**: Simple static HTML/JS application, no complex dependencies
+- **Modern UI**: Beautiful, responsive design with dark theme
+- **GitHub Pages Ready**: Works perfectly when deployed to GitHub Pages
 
 ## 📋 Table of Contents
 
@@ -36,6 +41,28 @@
 - (Optional) Backend server for full functionality
 
 ### Quick Start
+
+#### Option 1: GitHub Pages (Recommended for Quick Testing)
+
+1. Fork or clone this repository
+2. Go to your repository settings on GitHub
+3. Navigate to **Pages** in the left sidebar
+4. Under **Source**, select the branch (usually `main` or `master`)
+5. Click **Save**
+6. Wait a few minutes for GitHub Pages to deploy
+7. Open your browser and navigate to:
+```
+https://yourusername.github.io/vulnshop/
+```
+or
+```
+https://yourusername.github.io/vulnshop-main/
+```
+(depending on your repository name)
+
+**Note**: Replace `yourusername` and `vulnshop` with your actual GitHub username and repository name.
+
+#### Option 2: Local Development Server
 
 1. Clone the repository:
 ```bash
@@ -64,6 +91,10 @@ npx http-server -p 8000
 ```
 http://localhost:8000
 ```
+
+#### Option 3: Direct File Access
+
+Simply open `index.html` directly in your browser (some features may not work due to CORS restrictions).
 
 ## 🔓 Vulnerabilities
 

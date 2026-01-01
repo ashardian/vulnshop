@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(location.search);
   const prodId = Number(params.get("id") || 0);
   if (document.getElementById("prod-id")) {
-    const products = await fetch("/vulnshop/assets/data/products.json").then((r) => r.json()).catch(() => []);
+    const products = await fetch("assets/data/products.json").then((r) => r.json()).catch(() => []);
     const prod = products.find((p) => p.id === prodId) || { id: prodId, name: `Product #${prodId}`, price: 99, desc: "A great product." };
     document.getElementById("prod-id").value = String(prod.id);
     document.getElementById("prod-title").textContent = prod.name;
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       e.preventDefault();
       const u = adminLoginForm.querySelector('input[name="username"]')?.value || "";
       VulnLogger.logAdminLogin(u);
-      setTimeout(() => (window.location.href = "/vulnshop/admin/index.html"), 300 + Math.random() * 800);
+      setTimeout(() => (window.location.href = "admin/index.html"), 300 + Math.random() * 800);
     });
   }
 
