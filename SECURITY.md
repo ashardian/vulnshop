@@ -26,27 +26,6 @@
 | Latest  | :white_check_mark: |
 | < 1.0   | :x:                |
 
-## Reporting a Vulnerability
-
-If you discover a vulnerability in the **framework** itself (not an intentional vulnerability), please report it responsibly:
-
-1. **Do NOT** open a public issue
-2. Email security concerns to: [Your Security Email]
-3. Include:
-   - Description of the vulnerability
-   - Steps to reproduce
-   - Potential impact
-   - Suggested fix (if any)
-
-## Responsible Disclosure
-
-We appreciate responsible disclosure of framework vulnerabilities. We will:
-
-- Acknowledge receipt of your report within 48 hours
-- Provide an initial assessment within 7 days
-- Keep you informed of our progress
-- Credit you in our security acknowledgments (if desired)
-
 ## Legal Notice
 
 **Unauthorized access to computer systems is illegal.** Users of this software are solely responsible for:
